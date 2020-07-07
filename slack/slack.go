@@ -10,7 +10,6 @@ import (
 )
 
 /*
-   TODO: Change @BOT_NAME to the same thing you entered when creating your Slack application.
    NOTE: command_arg_1 and command_arg_2 represent optional parameteras that you define
    in the Slack API UI
 */
@@ -45,7 +44,6 @@ func RespondToEvents(slackClient *slack.RTM) {
 			}
 			message := strings.Replace(ev.Msg.Text, botTagString, "", -1)
 
-			// TODO: Make your bot do more than respond to a help command. See notes below.
 			// Make changes below this line and add additional funcs to support your bot's functionality.
 			// sendHelp is provided as a simple example. Your team may want to call a free external API
 			// in a function called sendResponse that you'd create below the definition of sendHelp,
@@ -53,7 +51,6 @@ func RespondToEvents(slackClient *slack.RTM) {
 
 			// START SLACKBOT CUSTOM CODE
 			// ===============================================================
-			sendResponse(slackClient, message, ev.Channel)
 			sendHelp(slackClient, message, ev.Channel)
 			sendGif(slackClient, message, ev.Channel)
 			// ===============================================================
@@ -75,7 +72,7 @@ func sendHelp(slackClient *slack.RTM, message, slackChannel string) {
 func sendGif(slackClient *slack.RTM, message, slackChannel string) {
 	keyWord := strings.Split(message, " ")
 
-	fmt.Println(keyWord[0])
+	// GetGif: My version of sendResponse ('gif.go')
 	d, err := GetGif(keyWord[0])
 	if err != nil {
 		fmt.Println("Error getting GIF: ", err)
@@ -87,20 +84,4 @@ func sendGif(slackClient *slack.RTM, message, slackChannel string) {
 	gifMsg := fmt.Sprintf("Looking for a GIF... \nKey word: %v\n%v", keyWord[0], d.Data[r].URL)
 
 	slackClient.SendMessage(slackClient.NewOutgoingMessage(gifMsg, slackChannel))
-}
-
-// sendResponse is NOT unimplemented --- write code in the function body to complete!
-
-func sendResponse(slackClient *slack.RTM, message, slackChannel string) {
-	command := strings.ToLower(message)
-	println("[RECEIVED] sendResponse:", command)
-
-	// START SLACKBOT CUSTOM CODE
-	// ===============================================================
-	// TODO:
-	//      1. Implement sendResponse for one or more of your custom Slackbot commands.
-	//         You could call an external API here, or create your own string response. Anything goes!
-	//      2. STRETCH: Write a goroutine that calls an external API based on the data received in this function.
-	// ===============================================================
-	// END SLACKBOT CUSTOM CODE
 }
